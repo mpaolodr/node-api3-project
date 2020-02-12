@@ -30,8 +30,22 @@ router.get("/:id", validatePostId, (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
-  // do your magic!
+router.delete("/:id", validatePostId, (req, res) => {
+  const { id } = req.params;
+
+  Posts.getById(id)
+    .then(post => {
+      Posts.remove(id)
+        .then(deleted => {
+          res.status(200).json(post);
+        })
+        .catch(err => {
+          res.status(400).json({ errorMessage: "Post can't be deleted" });
+        });
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
 });
 
 router.put("/:id", (req, res) => {
