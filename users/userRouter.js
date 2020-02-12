@@ -60,16 +60,47 @@ router.get("/:id", validateUserId, (req, res) => {
     });
 });
 
-router.get("/:id/posts", (req, res) => {
-  // do your magic!
+router.get("/:id/posts", validateUserId, (req, res) => {
+  const { id } = req.user;
+
+  Users.getUserPosts(id)
+    .then(posts => {
+      res.status(200).json(posts);
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
 });
 
-router.delete("/:id", (req, res) => {
-  // do your magic!
+router.delete("/:id", validateUserId, (req, res) => {
+  const { id } = req.user;
+
+  Users.remove(id)
+    .then(success => {
+      res.status(200).json(req.user);
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
 });
 
-router.put("/:id", (req, res) => {
-  // do your magic!
+router.put("/:id", validateUserId, validateUser, (req, res) => {
+  const { id } = req.user;
+  const userData = req.body;
+
+  Users.update(id, userData)
+    .then(success => {
+      Users.getById(id)
+        .then(updatedUser => {
+          res.status(200).json(updatedUser);
+        })
+        .catch(err => {
+          res.status(500).json({ errorMessage: err.message });
+        });
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
 });
 
 module.exports = router;

@@ -5,11 +5,15 @@ function validateUserId(req, res, next) {
 
   Users.getById(id)
     .then(user => {
-      req.user = user;
-      next();
+      if (user) {
+        req.user = user;
+        next();
+      } else {
+        res.status(400).json({ message: "Invalid user Id" });
+      }
     })
     .catch(err => {
-      res.status(400).json({ message: "Invalid user Id" });
+      res.status(500).json({ errorMessage: err.message });
     });
 }
 
