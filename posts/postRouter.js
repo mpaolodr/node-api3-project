@@ -48,8 +48,23 @@ router.delete("/:id", validatePostId, (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
-  // do your magic!
+router.put("/:id", validatePostId, (req, res) => {
+  const { id } = req.params;
+  const postData = req.body;
+
+  Posts.update(id, postData)
+    .then(post => {
+      Posts.getById(id)
+        .then(updated => {
+          res.status(200).json(updated);
+        })
+        .catch(err => {
+          res.status(500).json({ errorMessage: err.message });
+        });
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: "Post can't be updated" });
+    });
 });
 
 module.exports = router;
