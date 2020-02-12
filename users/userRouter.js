@@ -1,47 +1,51 @@
-const express = require('express');
+const express = require("express");
+
+// helpers
+const Users = require("../users/userDb.js");
+
+// users custom middleware
+const {
+  validateUserId,
+  validateUser,
+  validatePost
+} = require("../api/middlewares/userMiddlewares.js");
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post("/", validateUser, (req, res) => {
+  const userData = req.body;
+
+  Users.insert(userData)
+    .then(user => {
+      res.status(201).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
+});
+
+router.post("/:id/posts", (req, res) => {
   // do your magic!
 });
 
-router.post('/:id/posts', (req, res) => {
+router.get("/", (req, res) => {
   // do your magic!
 });
 
-router.get('/', (req, res) => {
+router.get("/:id", (req, res) => {
   // do your magic!
 });
 
-router.get('/:id', (req, res) => {
+router.get("/:id/posts", (req, res) => {
   // do your magic!
 });
 
-router.get('/:id/posts', (req, res) => {
+router.delete("/:id", (req, res) => {
   // do your magic!
 });
 
-router.delete('/:id', (req, res) => {
+router.put("/:id", (req, res) => {
   // do your magic!
 });
-
-router.put('/:id', (req, res) => {
-  // do your magic!
-});
-
-//custom middleware
-
-function validateUserId(req, res, next) {
-  // do your magic!
-}
-
-function validateUser(req, res, next) {
-  // do your magic!
-}
-
-function validatePost(req, res, next) {
-  // do your magic!
-}
 
 module.exports = router;

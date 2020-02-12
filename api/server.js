@@ -6,7 +6,7 @@ const postRouter = require("../posts/postRouter.js");
 const userRouter = require("../users/userRouter.js");
 
 // custom middleware imports
-const { logger } = require("../api/middleware");
+const { logger } = require("./middlewares/globalMiddleware");
 
 const server = express();
 
