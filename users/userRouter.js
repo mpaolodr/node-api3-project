@@ -39,11 +39,25 @@ router.post("/:id/posts", validateUserId, validatePost, (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  // do your magic!
+  Users.get()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
 });
 
-router.get("/:id", (req, res) => {
-  // do your magic!
+router.get("/:id", validateUserId, (req, res) => {
+  const { id } = req.user;
+
+  Users.getById(id)
+    .then(user => {
+      res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: err.message });
+    });
 });
 
 router.get("/:id/posts", (req, res) => {
