@@ -4,8 +4,8 @@ function validateUserId(req, res, next) {
   const { id } = req.params;
 
   Users.getById(id)
-    .then(success => {
-      req.user(id);
+    .then(user => {
+      req.user = user;
       next();
     })
     .catch(err => {
@@ -28,7 +28,6 @@ function validateUser(req, res, next) {
 
 function validatePost(req, res, next) {
   const postData = req.body;
-
   if (postData) {
     if (postData.text) {
       next();
