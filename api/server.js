@@ -19,7 +19,8 @@ server.use("/api/posts", postRouter);
 server.use("/api/users", userRouter);
 
 server.get("/", (req, res) => {
-  res.status(200).end();
+  const message = { message: process.env.MESSAGE };
+  res.status(200).json({ message });
 });
 
 module.exports = server;
